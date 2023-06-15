@@ -5,6 +5,8 @@ import { db } from "../../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import Result from "../Result/Result";
 
+
+
 const Questions = ({ singleLesson }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
