@@ -1,0 +1,118 @@
+.header {
+  width: 100%;
+  background: #d9d9d9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Inter";
+  input {
+    width: 224px;
+    height: 35px;
+    text-align: center;
+    background: #fcfcfc;
+    border: none;
+    border-radius: 15px;
+    outline: none;
+  }
+
+  P {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 22px;
+
+    color: rgba(0, 0, 0, 0.66);
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .nav {
+    height: 70px;
+
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+      color: #7d28ea;
+      margin-left: 20px;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 30px;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    .left-side {
+      display: flex;
+      justify-content: space-around;
+      width: 40%;
+      align-items: center;
+      @media only screen and (max-width: "1023px") {
+        display: none;
+      }
+    }
+    .right-side {
+      width: 40%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      @media only screen and (max-width: "1023px") {
+        display: none;
+      }
+      .right-side_btn {
+        margin: 0px 20px;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  .hamburger-menu {
+    position: relative;
+    top: 0px;
+    right: 20px;
+    font-size: 2rem;
+    display: none;
+  }
+
+  @media only screen and (max-width: "1023px") {
+    .hamburger-menu {
+      display: block;
+    }
+  }
+
+  .nav-2 {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    h2 {
+      color: #7d28ea;
+      margin-left: 20px;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 30px;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .left-side {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-side {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+a:hover {
+  text-decoration: none;
+}
