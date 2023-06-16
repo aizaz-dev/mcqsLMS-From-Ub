@@ -5,7 +5,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import { FiPlus } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
 import { Button, Modal } from 'antd';
-import MathKeyboard from "../../MathKeyboard/MathKeyboard";
+// import MathKeyboard from "../../MathKeyboard/MathKeyboard";
 
 const QuizCreator = ({ updateParentArray }) => {
   const [questions, setQuestions] = useState([]);

@@ -26,6 +26,7 @@ import CreatedByMe from "./components/ClassRoom/MyLibrary/CreatedByMe/CreatedByM
 import Important from "./components/ClassRoom/MyLibrary/Important/Important"
 import Liked from "./components/ClassRoom/MyLibrary/Liked/Liked"
 import All from "./components/ClassRoom/MyLibrary/All/All"
+import Folder from "./components/ClassRoom/MyLibrary/Folder/Folder";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursesList = lazy(() => import("./pages/CoursesList/CoursesList"));
@@ -66,6 +67,7 @@ function App() {
                   <Route exact path="important" element={<Important/>} />
                   <Route exact path="liked" element={<Liked/>} />
                   <Route exact path="all" element={<All/>} />
+                  <Route exact path="*" element={<Folder/>} />
                 </Route>
                 <Route path="create" element={<CreateQuiz />} />
                 <Route path="class" element={<Class />} />

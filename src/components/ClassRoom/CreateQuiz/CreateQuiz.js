@@ -3,7 +3,7 @@ import "./CreateQuiz.scss";
 import { useState } from "react";
 import { Button, Modal } from "antd";
 import AddQuestion from "./AddQusions/AddQuestion";
-import { auth, db, firebaseConfig } from ""
+import { auth, db, firebaseConfig } from "../../../firebase";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import firebase from "firebase/compat/app";
@@ -51,10 +51,10 @@ const CreateQuiz = () => {
   const [chapters, setChapters] = useState([]);
   const [filterArray, setFilterArray] = useState([]);
   const [showlessonimage, setShowlessonimage] = useState(null);
-  const localData = localStorage.getItem("userData")
-  const role = localData?JSON.parse(localData).role: null;
-  const ref_id = localData?JSON.parse(localData).userId: null;
-  console.log(role)
+  const localData = localStorage.getItem("userData");
+  const role = localData ? JSON.parse(localData).role : null;
+  const ref_id = localData ? JSON.parse(localData).userId : null;
+  console.log(role);
   let chapterName;
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -316,8 +316,8 @@ const CreateQuiz = () => {
             subject: selected_book,
             questions: uploadedQuestions,
             playCounter: "",
-            role:role,
-            refId:ref_id, 
+            role: role,
+            refId: ref_id,
             createdAt: timestamp,
           };
 
@@ -352,7 +352,7 @@ const CreateQuiz = () => {
       selectedItems
     );
   };
-  
+
   return (
     <div className="quiz-main-div">
       <h2 className="A-h2">Create Quiz</h2>

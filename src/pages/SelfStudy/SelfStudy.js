@@ -7,7 +7,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import fetchData from "../../functions/getData";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import SelfSingleChapter from "../../components/SelfStudy/SelfSingleChapter/SelfSingleChapter";
 import Sidebar from "../../components/SelfStudy/Sidebar/Sidebar";
@@ -44,7 +44,9 @@ const SelfStudy = () => {
     setChapters(newData);
   };
   const fetchedDataLessons = async (collectionName) => {
-    const querySnapshot = await getDocs(collection(db, collectionName));
+    const querySnapshot = await getDocs(
+      query(collection(db, collectionName), where("quizType", "==", "self"))
+    );
     const newData = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
