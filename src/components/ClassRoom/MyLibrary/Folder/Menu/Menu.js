@@ -14,16 +14,7 @@ import Logout from "@mui/icons-material/Logout";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import BeenhereIcon from "@mui/icons-material/Beenhere";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-export default function AccountMenu({
-  handleLikeQuiz,
-  handleImportantQuiz,
-  id,
-  chapterId,
-  subject,
-  lessonName,
-  grade,
-  lessonImage,
-}) {
+export default function AccountMenu({ paramName, paramId, handleDelete }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -85,45 +76,8 @@ export default function AccountMenu({
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem
-          onClick={() =>
-            handleLikeQuiz(
-              id,
-              chapterId,
-              subject,
-              lessonName,
-              grade,
-              lessonImage
-            )
-          }
-        >
-          <FavoriteIcon sx={{ fontSize: 14, marginRight: "10px" }} /> Like
-        </MenuItem>
-        {/* <Divider />
-        <MenuItem sx={{ marginRight: "20px" }} onClick={handleClose}>
-          <BeenhereIcon
-            sx={{ fontSize: 14, marginRight: "10px", fontWeight: 500 }}
-          />{" "}
-          Save
-        </MenuItem> */}
-        <Divider />
-        <MenuItem
-          sx={{ marginRight: "20px" }}
-          onClick={() =>
-            handleImportantQuiz(
-              id,
-              chapterId,
-              subject,
-              lessonName,
-              grade,
-              lessonImage
-            )
-          }
-        >
-          <BeenhereIcon
-            sx={{ fontSize: 14, marginRight: "10px", fontWeight: 500 }}
-          />{" "}
-          Imp
+        <MenuItem onClick={() => handleDelete(paramId)}>
+          <FavoriteIcon sx={{ fontSize: 14, marginRight: "10px" }} /> Delete
         </MenuItem>
       </Menu>
     </React.Fragment>

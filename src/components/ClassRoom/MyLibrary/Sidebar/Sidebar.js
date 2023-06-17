@@ -110,6 +110,14 @@ const Sidebar = () => {
           <span className="classroom_sidebar_main_title">Created By Me</span>
         </NavLink>
         <NavLink
+          to="/classroom/library/saved"
+          className="classroom_library_sidebar_main_item"
+          activeClassName="active"
+        >
+          <FiCompass />
+          <span className="classroom_sidebar_main_title">Saved</span>
+        </NavLink>
+        <NavLink
           to="/classroom/library/important"
           className="classroom_library_sidebar_main_item"
           activeClassName="active"
@@ -146,9 +154,9 @@ const Sidebar = () => {
           </Button>
         </div>
         <div className="all_folders">
-          {folders.map((folder,id) => (
+          {folders.map((folder, id) => (
             <NavLink
-              to={`/classroom/library/${folder.name}`}
+              to={`/classroom/library/${folder.id}?folderName=${folder.name}&id=${folder.id}`}
               key={id}
               className="all_folders_item"
             >

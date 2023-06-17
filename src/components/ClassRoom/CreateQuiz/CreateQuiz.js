@@ -49,6 +49,8 @@ const CreateQuiz = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
   const [chapters, setChapters] = useState([]);
+  const [foldersName, setFoldersName] = useState([]);
+  const [selectedFolder, setSelectedFolder] = useState("");
   const [filterArray, setFilterArray] = useState([]);
   const [showlessonimage, setShowlessonimage] = useState(null);
   const localData = localStorage.getItem("userData");
@@ -63,7 +65,21 @@ const CreateQuiz = () => {
   };
 
   const options = filterArray.map((item) => item.title);
-  console.log(filterArray);
+
+  // Fetching Folders Name
+  const fetchFoldersName = async (col) => {
+    try {
+      const studentsCollectionRef = collection(db, col);
+      const querySnapshot = await getDocs(studentsCollectionRef);
+      const names = querySnapshot.docs.map((doc) => doc.data());
+      setFoldersName(names);
+    } catch (error) {
+      console.error("Error fetching student names:", error);
+    }
+  };
+  const handleSelectFolderChange = (event) => {
+    setSelectedFolder(event.target.value);
+  };
 
   const fetchedData = async (collectionName) => {
     const querySnapshot = await getDocs(collection(db, collectionName));
@@ -76,6 +92,7 @@ const CreateQuiz = () => {
 
   useEffect(() => {
     fetchedData("chapters");
+    fetchFoldersName("teacherFolders");
   }, []);
 
   useEffect(() => {
@@ -302,6 +319,7 @@ const CreateQuiz = () => {
         const timestamp = serverTimestamp();
 
         const docRef = collection(db, "lessonQuiz");
+        const docRef2 = collection(db, "teacherFolderQuiz");
         const querySnapshot = await getDocs(query(docRef));
 
         if (querySnapshot) {
@@ -322,6 +340,25 @@ const CreateQuiz = () => {
           };
 
           const newDocRef = await addDoc(docRef, docData);
+          if (selectedFolder) {
+            const docData2 = {
+              chapterId,
+              lessonName,
+              lessonImage: imageURL,
+              totalMarks,
+              totalDuration,
+              quizType,
+              grade: selectedOptions,
+              subject: selected_book,
+              questions: uploadedQuestions,
+              playCounter: "",
+              role: role,
+              refId: ref_id,
+              createdAt: timestamp,
+              foldersName: selectedFolder,
+            };
+            const newDockRef2 = await addDoc(docRef2, docData2);
+          }
           //alert();
           toast.success("Quiz added successfully");
           console.log("Data added to Firestore");
@@ -816,12 +853,26 @@ const CreateQuiz = () => {
           </div>
         </div>
         <div className="end-div-btn">
+          <div>
+            <select
+              className="select"
+              value={selectedFolder}
+              onChange={handleSelectFolderChange}
+            >
+              <option value="">Select a Folder</option>
+              {foldersName.map((item, key) => (
+                <option key={key} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <button
             className="btnn"
             type="submit"
-            onClick={(e) => handleSubmit(e, "self")}
+            onClick={(e) => handleSubmit(e, "private")}
           >
-            Submit self-study
+            Private
           </button>
           <button
             className="btnn"

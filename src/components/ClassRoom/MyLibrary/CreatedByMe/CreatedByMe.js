@@ -23,35 +23,92 @@ const CreatedByMe = () => {
   useEffect(() => {
     fetchedQuiziz("lessonQuiz");
   }, []);
-  const handleLikeQuiz = async (quizId) => {
+  const handleLikeQuiz = async (
+    quizId,
+    chapterId,
+    subject,
+    lessonName,
+    grade,
+    lessonImage
+  ) => {
     try {
       const likesCollectionRef = collection(db, "likes");
-      await addDoc(likesCollectionRef, { quizId,userId:id });
+      await addDoc(likesCollectionRef, {
+        quizId,
+        userId: id,
+        chapterId,
+        subject,
+        lessonName,
+        grade,
+        lessonImage,
+      });
       console.log("Quiz added to likes collection");
     } catch (error) {
       console.error("Error adding quiz to likes collection:", error);
     }
   };
-  console.log(quiziz);
+  const handleImportantQuiz = async (
+    quizId,
+    chapterId,
+    subject,
+    lessonName,
+    grade,
+    lessonImage
+  ) => {
+    try {
+      const likesCollectionRef = collection(db, "important");
+      await addDoc(likesCollectionRef, {
+        quizId,
+        userId: id,
+        chapterId,
+        subject,
+        lessonName,
+        grade,
+        lessonImage,
+      });
+      console.log("Quiz added to likes collection");
+    } catch (error) {
+      console.error("Error adding quiz to likes collection:", error);
+    }
+  };
   return (
     <div className="mylibrary_created">
       {quiziz.map((item) => {
-        
         return (
           <div className="mylibrary_created_item">
-            <img className="mylibrary_created_item_img" src="" alt="" />
+            <img
+              className="mylibrary_created_item_img"
+              src={item.lessonImage}
+              alt=""
+            />
             <div className="mylibrary_created_item_det">
               <div className="mylibrary_created_item_det_dots">
-                <Menu handleLikeQuiz={handleLikeQuiz} id={item.id}  />
+                <Menu
+                  handleLikeQuiz={handleLikeQuiz}
+                  handleImportantQuiz={handleImportantQuiz}
+                  id={item.id}
+                  chapterId={item.chapterId}
+                  subject={item.subject}
+                  lessonName={item.lessonName}
+                  grade={item.grade}
+                  lessonImage={item.lessonImage}
+                />
               </div>
               <div className="mylibrary_created_item_det_header">{}</div>
-              <div className="mylibrary_created_item_det_name">{item.lessonName}</div>
-              <div className="mylibrary_created_item_det_det">
-                <div className="mylibrary_created_item_det_det_total">{item.subject}</div>
-                <div className="mylibrary_created_item_det_det_class">{item.grade}</div>
-               
+              <div className="mylibrary_created_item_det_name">
+                {item.lessonName}
               </div>
-              <div className="mylibrary_created_item_det_name">{item.chapterId}</div>
+              <div className="mylibrary_created_item_det_det">
+                <div className="mylibrary_created_item_det_det_total">
+                  {item.subject}
+                </div>
+                <div className="mylibrary_created_item_det_det_class">
+                  {item.grade}
+                </div>
+              </div>
+              <div className="mylibrary_created_item_det_name">
+                {item.chapterId}
+              </div>
             </div>
           </div>
         );

@@ -1,19 +1,31 @@
+ @import "../../Styles/app.scss";
 .header {
   width: 100%;
   background: #d9d9d9;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   font-family: "Inter";
-  input {
-    width: 224px;
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 20px;
     height: 35px;
     text-align: center;
-    background: #fcfcfc;
-    border: none;
-    border-radius: 15px;
-    outline: none;
+    cursor: pointer;
+  
+    .search-text {
+      text-align: center;
+      width: 90%;
+      height: 35px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.66);
+      border-radius: 20px;
+      align-items: center;
+    }
+   
   }
+  
 
   P {
     font-style: normal;
@@ -22,27 +34,21 @@
     line-height: 22px;
 
     color: rgba(0, 0, 0, 0.66);
-    &:hover {
-      text-decoration: none;
-    }
   }
+  p:hover{color: $blue;}
+
   .nav {
     height: 70px;
-
+    align-items: center;
     display: flex;
     width: 100%;
     justify-content: space-between;
-    align-items: center;
     h2 {
-      color: #7d28ea;
+      color: #a575e3;
       margin-left: 20px;
       font-style: normal;
       font-weight: 700;
       font-size: 25px;
-      line-height: 30px;
-      &:hover {
-        text-decoration: none;
-      }
     }
     .left-side {
       display: flex;
@@ -57,24 +63,22 @@
       width: 40%;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-around;
       @media only screen and (max-width: "1023px") {
         display: none;
-      }
-      .right-side_btn {
-        margin: 0px 20px;
-        &:hover {
-          text-decoration: none;
-        }
       }
     }
   }
   .hamburger-menu {
     position: relative;
-    top: 0px;
+    top: 20px;
     right: 20px;
     font-size: 2rem;
     display: none;
+  }
+  .hamburger-menu:hover{
+    color: $blue;
+    cursor: pointer;
   }
 
   @media only screen and (max-width: "1023px") {
@@ -89,30 +93,40 @@
     display: flex;
     flex-direction: column;
     h2 {
+      margin-top: 20px;
       color: #7d28ea;
       margin-left: 20px;
       font-style: normal;
       font-weight: 700;
       font-size: 25px;
       line-height: 30px;
-      &:hover {
-        text-decoration: none;
-      }
     }
+    p {
+      margin: 10px;
+    }
+    p:hover{color: $blue;}
+
 
     .left-side {
       align-items: center;
       display: flex;
       flex-direction: column;
+      p {
+        margin: 10px;
+      }
+      p:hover{color: $blue;}
     }
 
     .right-side {
       align-items: center;
       display: flex;
       flex-direction: column;
+      p {
+        margin: 10px;
+      }
+      p:hover{
+        color: $blue;
+      }
     }
   }
-}
-a:hover {
-  text-decoration: none;
 }

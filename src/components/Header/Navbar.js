@@ -1,12 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./Navbar.scss";
+import { useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
-const Navbar = ({ role, isLogin }) => {
+import { FaSearch } from "react-icons/fa";
 
+const Navbar = ({ role, isLogin }) => {
+  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
   console.log(role);
   const getWidth = () =>
     window.innerWidth ||
@@ -42,13 +47,25 @@ const Navbar = ({ role, isLogin }) => {
     localStorage.removeItem("userData");
     try {
       await auth.signOut();
-    
+
       window.location.reload(true);
       // Redirect or update UI to reflect successful logout
     } catch (error) {
       console.log("Error during logout:", error);
     }
   };
+
+  const handleonchange = (e) => {
+    setSearch(e.target.value);
+  };
+  const handleBlur = () => {
+    setSearch(''); // Reset the search state when the input loses focus
+  };
+  const handleEnter = (e) => {
+    e.preventDefault()
+    navigate(`self-search-quiz?search=${search}`);
+  };
+
   return (
     <div className="header">
       <div className={showMenu ? (newwidth < 1023 ? "nav-2" : "nav") : "nav"}>
@@ -61,10 +78,28 @@ const Navbar = ({ role, isLogin }) => {
             {" "}
             <p>Self Study</p>
           </Link>
-          <input type="text" placeholder="Search Quiz" />
+          {(role == "Admin")&&(
+            <Link className="" to="/admin-dashboard">
+              <p>Admin Pannel</p>
+            </Link>
+          )}
+         
+          <div className="search-bar">
+            <form onSubmit={handleEnter} style={{display:"flex"}}>
+              <input
+                className="search-text"
+                value={search}
+                onChange={(e) => handleonchange(e)}
+                placeholder="SearchQuiz..."
+                onBlur={handleBlur}
+              />
+              <FaSearch  style={{textAlign:"center", marginTop:"10px", marginRight:"5px"}} onClick={handleEnter} />
+            </form>
+          </div>
         </div>
         <div className="right-side">
           {isLogin && (
+          
             <Link className="right-side_btn" to="classroom">
               <p>Class room</p>
             </Link>
@@ -80,8 +115,8 @@ const Navbar = ({ role, isLogin }) => {
               <p>Sign in</p>
             </Link>
           )}
-          {(role == "Teacher" || role == "admin") && (
-            <Link className="right-side_btn" to="create-quiz">
+          {(role == "Admin")&&(
+            <Link className="right-side_btn" to="/admin-create-quiz">
               <p>Creat Quiz</p>
             </Link>
           )}

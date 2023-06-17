@@ -2,7 +2,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { useEffect, useState } from "react";
 
-const Liked = () => {
+const Saved = () => {
   const [quiziz, setQuiziz] = useState([]);
   const localData = localStorage.getItem("userData");
   const id = localData ? JSON.parse(localData).userId : null;
@@ -16,12 +16,12 @@ const Liked = () => {
   };
 
   useEffect(() => {
-    fetchedQuiziz("likes");
+    fetchedQuiziz("DynamicQuiz");
     console.log(quiziz, "liked");
   }, []);
   return (
     <div className="mylibrary_created">
-      {quiziz.map((item,key) => {
+      {quiziz.map((item, key) => {
         return (
           <div key={key} className="mylibrary_created_item">
             <img className="mylibrary_created_item_img" src="" alt="" />
@@ -56,4 +56,4 @@ const Liked = () => {
   );
 };
 
-export default Liked;
+export default Saved;
