@@ -67,16 +67,21 @@ const CreateQuiz = () => {
   const options = filterArray.map((item) => item.title);
 
   // Fetching Folders Name
-  const fetchFoldersName = async (col) => {
+  const fetchFoldersName = async (collectionName) => {
     try {
-      const studentsCollectionRef = collection(db, col);
-      const querySnapshot = await getDocs(studentsCollectionRef);
+      const studentsCollectionRef = collection(db, collectionName);
+      const querySnapshot = await getDocs(
+        query(studentsCollectionRef, where("userId", "==", ref_id))
+      );
       const names = querySnapshot.docs.map((doc) => doc.data());
+
       setFoldersName(names);
     } catch (error) {
       console.error("Error fetching student names:", error);
     }
   };
+  console.log("folders: " + foldersName);
+  console.log("ref_id: " + ref_id);
   const handleSelectFolderChange = (event) => {
     setSelectedFolder(event.target.value);
   };

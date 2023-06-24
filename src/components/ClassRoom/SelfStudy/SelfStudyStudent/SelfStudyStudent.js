@@ -1,36 +1,41 @@
 import React, { useEffect, useState } from "react";
-import "./SelfStudy.scss";
+import "./SelfStudyStudent.scss";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import fetchData from "../../functions/getData";
-import LoadingScreen from "../LoadingScreen/LoadingScreen";
+// import fetchData from "../../functions/getData";
+// import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
-import SelfSingleChapter from "../../components/SelfStudy/SelfSingleChapter/SelfSingleChapter";
-import Sidebar from "../../components/SelfStudy/Sidebar/Sidebar";
-const SelfStudy = () => {
+import { db } from "../../../../firebase";
+import Sidebar from "./Sidebar/Sidebar";
+
+import { useParams } from "react-router-dom";
+import SelfSingleChapter from "./SelfSingleChapter/SelfSingleChapter";
+
+const SelfStudyStudent = () => {
+  const { id } = useParams();
+  console.log(id,"idddddd");
   const [chapters, setChapters] = useState([]);
   const [lessons, setLessons] = useState([]);
-  const [result,setResult] = useState([])
+  const [result, setResult] = useState([]);
   const [filterArray, setFilterArray] = useState([]);
   const [grade, setGrade] = useState("K");
   const [value, setValue] = useState("1");
-  let bookName;
+  let chapterName;
 
   if (value == 1) {
-    bookName = "math";
+    chapterName = "math";
   }
   if (value == 2) {
-    bookName = "language art";
+    chapterName = "language art";
   }
   if (value == 3) {
-    bookName = "science";
+    chapterName = "science";
   }
   if (value == 4) {
-    bookName = "socialstudy";
+    chapterName = "socialstudy";
   }
   const getGrade = (event) => {
     setGrade(event.target.getAttribute("value"));
@@ -64,18 +69,16 @@ const SelfStudy = () => {
   useEffect(() => {
     fetchedDataChapters("chapters");
     fetchedDataLessons("lessonQuiz");
-    fetchedDataResult("result")
-    
+    fetchedDataResult("result");
   }, []);
 
   useEffect(() => {
     const filteredData = chapters.filter((chap) => {
-      return chap.subject == bookName && chap.grade.includes(grade);
+      return chap.subject == chapterName && chap.grade.includes(grade);
     });
-    
-    setFilterArray(filteredData);
 
-  }, [chapters, bookName, grade,result]);
+    setFilterArray(filteredData);
+  }, [chapters, chapterName, grade, result]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -99,7 +102,7 @@ const SelfStudy = () => {
           <TabPanel value="1">
             <div className="tabpanel_container">
               <div className="tabpanel_container_title">
-                {grade} grade {bookName}
+                {grade} grade {chapterName}
               </div>
               <div className="tabpanel_container_chapters">
                 {filterArray.map((element, id) => {
@@ -110,6 +113,7 @@ const SelfStudy = () => {
                       key={id}
                       result={result}
                       setResult={setResult}
+                      userId={id}
                     />
                   );
                 })}
@@ -119,7 +123,7 @@ const SelfStudy = () => {
           <TabPanel value="2">
             <div className="tabpanel_container">
               <div className="tabpanel_container_title">
-                {grade} grade {bookName}
+                {grade} grade {chapterName}
               </div>
               <div className="tabpanel_container_chapters">
                 {filterArray.map((element, id) => {
@@ -130,6 +134,7 @@ const SelfStudy = () => {
                       key={id}
                       result={result}
                       setResult={setResult}
+                      userId={id}
                     />
                   );
                 })}
@@ -139,7 +144,7 @@ const SelfStudy = () => {
           <TabPanel value="3">
             <div className="tabpanel_container">
               <div className="tabpanel_container_title">
-                {grade} grade {bookName}
+                {grade} grade {chapterName}
               </div>
               <div className="tabpanel_container_chapters">
                 {filterArray.map((element, id) => {
@@ -150,6 +155,7 @@ const SelfStudy = () => {
                       key={id}
                       result={result}
                       setResult={setResult}
+                      userId={id}
                     />
                   );
                 })}
@@ -159,7 +165,7 @@ const SelfStudy = () => {
           <TabPanel value="4">
             <div className="tabpanel_container">
               <div className="tabpanel_container_title">
-                {grade} grade {bookName}
+                {grade} grade {chapterName}
               </div>
               <div className="tabpanel_container_chapters">
                 {filterArray.map((element, id) => {
@@ -170,6 +176,7 @@ const SelfStudy = () => {
                       key={id}
                       result={result}
                       setResult={setResult}
+                      userId={id}
                     />
                   );
                 })}
@@ -182,4 +189,4 @@ const SelfStudy = () => {
   );
 };
 
-export default SelfStudy;
+export default SelfStudyStudent;

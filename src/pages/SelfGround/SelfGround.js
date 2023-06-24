@@ -4,6 +4,9 @@ import "./SelfGround.scss";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 const SelfGround = () => {
+  const localData = localStorage.getItem("userData");
+  const userId = localData ? JSON.parse(localData).userId : null;
+
   let params = useParams();
   const { id } = params;
 
@@ -19,8 +22,8 @@ const SelfGround = () => {
       console.log("Document not found!");
     }
   };
+
   useEffect(() => {
-    
     fetchedDataLessons("lessonQuiz");
     setSingleLesson(
       lessons.find((lesson) => {
@@ -28,16 +31,30 @@ const SelfGround = () => {
       })
     );
   }, []);
- 
+
   return (
     <div className="self_ground_container">
       <div className="self_ground_container_block">
         <div className="self_ground_total">
-          Questions {singleLesson?.questions?.length}
+          {singleLesson?.questions?.length} Questions
         </div>
+        <div className="self_ground_title">
+          Lesson Name : {singleLesson?.lessonName}
+        </div>
+        {userId && (
+          <div className="self_ground_des">
+            You are no registered your result will not be saved
+          </div>
+        )}
+
         <Link to={`/selfstudy/ground/play/${id}`}>
           <div className="self_ground_play">Play</div>
         </Link>
+        {userId && (
+          <Link className="self_ground_reg" to="/signup">
+            register
+          </Link>
+        )}
       </div>
     </div>
   );

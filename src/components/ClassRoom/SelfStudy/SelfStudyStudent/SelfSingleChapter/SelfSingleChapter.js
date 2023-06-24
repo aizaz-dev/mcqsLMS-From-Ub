@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { Button, Modal } from "antd";
 import { useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../../firebase";
-const SelfSingleChapter = ({ lessons, element, result }) => {
-  const localData = localStorage.getItem("userData");
-  const userId = localData ? JSON.parse(localData).userId : null;
+import { db } from "../../../../../firebase";
+
+const SelfSingleChapter = ({ lessons, element, result,   userId}) => {
+  // const localData = localStorage.getItem("userData");
+  // const userId = localData ? JSON.parse(localData).userId : null;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filteredLessonsArray, setFilteredLessonsArray] = useState([]);
   const [lessonsArrayWithResult, setLessonsArrayWithResult] = useState([]);

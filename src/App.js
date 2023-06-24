@@ -29,12 +29,32 @@ import All from "./components/ClassRoom/MyLibrary/All/All";
 import Folder from "./components/ClassRoom/MyLibrary/Folder/Folder";
 import Saved from "./components/ClassRoom/MyLibrary/Saved/Saved";
 import SearchQuizb from "./pages/SearchQuiz/SearchQuiz";
+import SelfStudyStudent from "./components/ClassRoom/SelfStudy/SelfStudyStudent/SelfStudyStudent";
+import Result from "./components/SelfPlay2/Result/Result";
+import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const CoursesList = lazy(() => import("./pages/CoursesList/CoursesList"));
 const ClassRoom = lazy(() => import("./pages/ClassRoom/ClassRoom"));
 function App() {
   const [role, setRole] = useState("");
   const [isLogin, setIsLogin] = useState("");
+  const [state, setState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
   useEffect(() => {
     const storedData = localStorage.getItem("userData");
     if (storedData) {
@@ -46,10 +66,15 @@ function App() {
       setIsLogin("");
     }
   }, []);
-
   return (
     <>
-      <Navbar role={role} isLogin={isLogin} />
+      <Navbar
+        role={role}
+        isLogin={isLogin}
+        state={state}
+        setState={setState}
+        toggleDrawer={toggleDrawer}
+      />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/">
@@ -58,6 +83,10 @@ function App() {
             <Route path="selfstudy" element={<SelfStudy />}></Route>
             <Route path="selfstudy/ground/:id" element={<SelfGround />} />
             <Route path="selfstudy/ground/play/:id" element={<SelfPlay />} />
+            <Route
+              path="selfstudy/ground/play/:id/result"
+              element={<Result />}
+            />
 
             {role == "Teacher" && (
               <Route path="classroom" element={<ClassRoom />}>
@@ -74,14 +103,28 @@ function App() {
                 <Route path="create" element={<CreateQuiz />} />
                 <Route path="class" element={<Class />} />
                 <Route path="self-study" element={<SelfStudyC />} />
+                <Route
+                  path="self-study/users/:id"
+                  element={<SelfStudyStudent />}
+                />
                 <Route path="code-room" element={<CodeRoom />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
             )}
             <Route path="self-search-quiz" element={<SearchQuizb />} />
-            <Route path="classroom/search" element={<SearchQuiz />} />
+            <Route
+              path="classroom/search"
+              element={
+                <SearchQuiz
+                  state={state}
+                  setState={setState}
+                  toggleDrawer={toggleDrawer}
+                />
+              }
+            />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
+            <Route path="forgetpassword" element={<ForgetPassword />} />
             <Route path="*" element={<Lost />} />
           </Route>
         </Routes>

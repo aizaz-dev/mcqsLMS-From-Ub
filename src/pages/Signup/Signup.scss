@@ -1,3 +1,4 @@
+@import "../../Styles/app.scss";
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -34,7 +35,7 @@
     .inner-content {
       margin-right: 30%;
     }
-    .select {
+    .signup_select {
       width: 300px;
       height: 35px;
       border-radius: 7px;
@@ -95,7 +96,7 @@
       .btn {
         all: unset;
         margin-top: 20px;
-        height: 40px;
+        padding: 10px 30px;
         border-radius: 50px;
         width: 130px;
         background-color: #7c89f1;
@@ -103,6 +104,36 @@
         font-weight: 600;
         color: white;
         text-align: center;
+        cursor:pointer;
+      }
+      .form_line {
+        width: 60%;
+
+        margin-top: 30px;
+        margin-bottom: 30px;
+        height: 2px;
+        background-color: rgba(104, 99, 99, 0.644);
+      }
+      .btn_google {
+        all: unset;
+
+        padding: 10px 30px;
+        border-radius: 50px;
+        background-color: $lightBlue;
+        font-weight: 500;
+        width: fit-content;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn_forget{
+        all: unset;
+        margin-top: 20px;
+        color: rgb(97, 93, 93);
+        cursor: pointer;
+        padding: 10px 30px;
       }
     }
   }

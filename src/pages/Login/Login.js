@@ -6,6 +6,7 @@ import { auth, db } from "../../firebase";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 const Login = () => {
   const [error, setError] = useState(false);
   const [email, setEmail] = useState("");
@@ -75,6 +76,7 @@ const Login = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        toast.error("Error: " + error.message);
         setError(true);
       });
   };

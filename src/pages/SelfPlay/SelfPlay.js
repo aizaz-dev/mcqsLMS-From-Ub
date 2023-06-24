@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import Timer from "../../components/SelfPlay/Timer/Timer";
-import Questions from "../../components/SelfPlay/Questions/Questions";
+import Questions from "../../components/SelfPlay2/Questions/Questions";
 
 const SelfPlay = () => {
   let params = useParams();

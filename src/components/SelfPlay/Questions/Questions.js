@@ -3,9 +3,8 @@ import "./Questions.scss";
 import Question from "../Question/Question";
 import { db } from "../../../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import Result from "../Result/Result";
-
-// <added
 
 const Questions = ({ singleLesson }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -15,24 +14,29 @@ const Questions = ({ singleLesson }) => {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [displayTime, setDisplayTime] = useState(0);
-  const [timeUnit, setTimeUnit] = useState("s");
-  const [totalTimeTaken, setTotalTimeTaken] = useState(0);
+  const [timer, setTimer] = useState(null);
   const questions = singleLesson.questions;
   const currentQuestion = questions[currentQuestionIndex];
   const timeLimit = currentQuestion?.timeLimit || 30;
-
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (currentQuestionIndex === 0) {
+  //     setStartTime((prevStartTime) => {
+  //       const newStartTime = prevStartTime || new Date();
+  //       console.log(newStartTime, "start time: useEffect");
+  //       return newStartTime;
+  //     });
+  //   }
+  // }, [currentQuestionIndex]);
   useEffect(() => {
-    if (currentQuestionIndex === 0) {
-      setStartTime(new Date());
-    }
-  }, [currentQuestionIndex]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
+    const newTimer = setTimeout(() => {
       handleNextQuestion();
     }, timeLimit * 1000);
+    setTimer(newTimer);
+    console.log(newTimer, "newTimer : useeffect");
+    console.log(timeLimit, " time limit : useeffect");
     return () => {
-      clearTimeout(timer);
+      clearTimeout(newTimer);
     };
   }, [currentQuestionIndex, timeLimit]);
 
@@ -40,9 +44,7 @@ const Questions = ({ singleLesson }) => {
     const correctArray = currentQuestion?.options
       .filter((item) => item.correct)
       .map((item) => item.text);
-
     const isCorrect = correctArray?.includes(answer);
-
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
     }
@@ -51,16 +53,28 @@ const Questions = ({ singleLesson }) => {
     if (currentQuestionIndex + 1 >= questions.length && !scoreStored) {
       setEndTime(new Date());
       setScoreStored(true);
-      console.log("StartTime:", startTime);
-      console.log("EndTime:", endTime);
+      clearTimeout(timer);
       storeScoreToFirestore();
     } else {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
   };
 
+  useEffect(() => {
+    if (currentQuestionIndex >= questions.length && scoreStored) {
+      setEndTime(new Date());
+    }
+  }, [currentQuestionIndex, questions.length, scoreStored]);
+
+  useEffect(() => {
+    if (scoreStored && endTime) {
+      const totalTimeInSeconds = Math.floor((endTime - startTime) / 1000);
+      console.log("startTime : " + startTime + " Endtime : " + endTime+" total time : "+totalTimeInSeconds);
+      setDisplayTime(totalTimeInSeconds);
+    }
+  }, [scoreStored, startTime, endTime, currentQuestionIndex]);
+
   const onSelectAnswer = (answer) => {
-    setSelectedAnswer(answer);
     handleNextQuestion(answer);
   };
 
@@ -69,66 +83,49 @@ const Questions = ({ singleLesson }) => {
 
   const storeScoreToFirestore = async () => {
     try {
-      const timeTaken = Math.abs(Math.floor((endTime - startTime) / 1000));
-      const calculatedDisplayTime =
-        timeTaken >= 60 ? Math.floor(timeTaken / 60) : timeTaken;
-      const calculatedTimeUnit = timeTaken >= 60 ? "min" : "s";
-      setDisplayTime(calculatedDisplayTime);
-      setTimeUnit(calculatedTimeUnit);
-
       const totalQuestions = questions.length;
-      const percentage = (score / totalQuestions) * 100;
-     
+      const percentage = Math.round((score / totalQuestions) * 100);
+
       const docRef = await addDoc(collection(db, "result"), {
         score: score,
         totalQuestions: totalQuestions,
         percentage: percentage,
         userId: id,
         chapterId: singleLesson.chapterId,
+        lessonName: singleLesson.lessonName,
         lessonId: singleLesson.id,
-        timeTaken: calculatedDisplayTime,
-        timeUnit: calculatedTimeUnit,
+        timeTaken: `${displayTime} s`,
+        timeUnit: "s",
       });
-
       console.log("Score stored successfully with ID:", docRef.id);
     } catch (error) {
       console.error("Error storing score:", error);
     }
   };
 
-  useEffect(() => {
-    if (scoreStored) {
-      const totalTime = Math.abs(Math.floor((endTime - startTime) / 1000));
-      const calculatedTotalTimeTaken =
-        totalTime >= 60 ? Math.floor(totalTime / 60) : totalTime;
-      const calculatedTimeUnit = totalTime >= 60 ? "min" : "s";
-
-      setTotalTimeTaken(calculatedTotalTimeTaken);
-      setTimeUnit(calculatedTimeUnit);
-    }
-  }, [scoreStored, endTime, startTime]);
-
   if (questions.length === 0) {
     return <div>No questions available</div>;
   }
 
   if (currentQuestionIndex >= questions.length) {
-    return (
-      <Result
-        score={score}
-        totalQuestions={questions.length}
-        timeTaken={displayTime}
-        timeUnit={timeUnit}
-        totalTimeTaken={totalTimeTaken}
-      />
+    return navigate(
+      `result?score=${score}&questionsLength=${questions.length}&totalTime=${displayTime}&startTime=${startTime}&endTime=${endTime}&timer=${timer}`
     );
   }
-
+  //   <Result
+  //   score={score}
+  //   totalQuestions={questions.length}
+  //   timeTaken={`${displayTime} s`}
+  //   timeUnit="s"
+  //   totalTimeTaken={displayTime}
+  // />
   return (
     <Question
-      question={currentQuestion.text}
-      options={currentQuestion.options}
+      question={currentQuestion?.text}
+      options={currentQuestion?.options}
       onSelectAnswer={onSelectAnswer}
+      timeLimit={timeLimit}
+      elapsedTime={displayTime}
     />
   );
 };
